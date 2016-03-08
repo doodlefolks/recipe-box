@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Recipe Box</title>
+    <link rel="stylesheet" type="text/css" href="styles/Skeleton-2.0.4/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="styles/Skeleton-2.0.4/css/skeleton.css" />
+    <link rel="stylesheet" type="text/css" href="styles/box.css" />
+  </head>
+  <body class="container">
+    <nav class="row hidden">
+      <a href="#" class="four columns">Recipe Box</a>
+      <a href="#" class="four columns">Find New Recipes</a>
+      <a href="#" class="four columns">Pantry</a>
+    </nav>
+    <form id="login">
+      <label for="login-email">Email:</label>
+      <input class="u-full-width" type="email" name="login-email" id="login-email" />
+      <label for="login-password">Password:</label>
+      <input class="u-full-width" type="password" name="login-password" id="login-password"/>
+      <input id="login-submit" type="submit" />
+    </form>
+    <main id="box" class="hidden">
+      <div class="row"></div>
+      <form class="hidden">
+        <label for="recipe-name">Recipe Name</label>
+        <input class="twelve columns" name="recipe-name" id="recipe-name" type="text" required />
+        <label>Ingredients</label>
+        <button id="add-ingredient">Add Ingredient</button>
+        <div id="ingredient-list"></div>
+        <label for="directions">Directions</label>
+        <textarea class="twelve columns" name="directions" id="directions" required></textarea>
+        <input type="submit" />
+      </form>
+    </main>
+    <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="scripts/box.js"></script>
+  </body>
+</html>
