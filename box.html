@@ -21,8 +21,8 @@
       <input id="login-submit" type="submit" />
     </form>
     <main id="box" class="hidden">
-      <div class="row"></div>
-      <form class="hidden">
+      <div id="recipes"></div>
+      <form class="hidden" id="recipe-form">
         <label for="recipe-name">Recipe Name</label>
         <input class="twelve columns" name="recipe-name" id="recipe-name" type="text" required />
         <label>Ingredients</label>
@@ -30,11 +30,13 @@
         <div id="ingredient-list"></div>
         <label for="directions">Directions</label>
         <textarea class="twelve columns" name="directions" id="directions" required></textarea>
-        <input type="submit" />
+        <input type="submit" id="recipe-submit" />
       </form>
+      <button id="add-recipe">Add New Recipe</button>
     </main>
     <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="scripts/config.js"></script>
     <script src="scripts/box.js"></script>
   </body>
 </html>

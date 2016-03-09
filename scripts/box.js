@@ -1,11 +1,35 @@
 (function () {
-  var db = new Firebase('https://amber-heat-7646.firebaseio.com');
+  var db = new Firebase(config.FIREBASE_API);
   var userAuthorized = function (authData) {
     $('nav').removeClass('hidden');
     $('#box').removeClass('hidden');
     $('#login').addClass('hidden');
 
     var userData = new User(authData.uid);
+
+    $('#add-recipe').click(function (e) {
+      $('#recipe-form').removeClass('hidden');
+    });
+    $('#recipe-submit').click(function (e) {
+      e.preventDefault();
+      var userRef = db.child('users/' + authData.uid);
+      userRef.once('value', function(data) {
+        var userData = data.val();
+        var name = $('#recipe-name').val();
+        var directions = $('#directions').val();
+        var ingredientNodes = $('input[name="ingredient"]');
+        var ingredients = {};
+        for (var i = 0; i < ingredientNodes.length; i++) {
+          ingredients[i] = ingredientNodes[i].value;
+        }
+        userRef.update({ recipeCount: userData.recipeCount + 1 });
+        userRef.child('recipes').push({
+          name: name,
+          ingredients: ingredients,
+          directions: directions
+        });
+      });
+    });
     $('#add-ingredient').click(function (e) {
       e.preventDefault();
       var row = $('<div class="row"></div>')
@@ -14,8 +38,9 @@
     });
   };
 
-  function User (id) {
+  function User (id, recipes) {
     this.id = id;
+    this.recipes = recipes;
   }
 
   $(document).ready(function () {
@@ -28,7 +53,6 @@
           password: password
         }, function(error, authData) {
           if (!error) {
-            console.log(authData);
             userAuthorized(authData);
           } else {
             console.log(error);
