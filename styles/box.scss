@@ -1,3 +1,19 @@
 .hidden {
   display: none;
 }
+nav {
+  margin: 20px 0;
+}
+.recipe-container {
+  border: 1px solid black;
+  border-radius: 4px;
+  box-shadow: 3px 3px 5px black;
+  padding: 5px;
+  height: 250px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  h6 {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+  }
+}

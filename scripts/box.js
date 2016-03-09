@@ -11,11 +11,11 @@
         var recipe = recipes[recipeKeys[i]];
         var newRecipe = $('\
           <div class="recipe-container four columns">\
-              <h4>' + recipe.name + '</h4>\
-              <h5>Ingredients</h5>\
+              <h5>' + recipe.name + '</h5>\
+              <h6>Ingredients</h6>\
               <ul>\
               </ul>\
-              <h5>Directions</h5>\
+              <h6>Directions</h6>\
               <p>' + recipe.directions + '</p>\
           </div>');
         for (var j = 0; j < recipe.ingredients.length; j++) {
