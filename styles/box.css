@@ -4,6 +4,10 @@
 nav {
   margin: 20px 0; }
 
+h6 {
+  font-weight: bold;
+  margin-bottom: 0.3rem; }
+
 .recipe-container {
   border: 1px solid black;
   border-radius: 4px;
@@ -12,8 +16,23 @@ nav {
   height: 250px;
   margin-bottom: 20px;
   overflow: hidden; }
-  .recipe-container h6 {
-    font-weight: bold;
-    margin-bottom: 0.3rem; }
+  .recipe-container:hover {
+    cursor: pointer; }
+
+#overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 99999; }
+
+#recipe-overlay {
+  background-color: white;
+  margin: 50px 10%;
+  padding: 30px;
+  overflow: scroll;
+  border-radius: 10px; }
 
 /*# sourceMappingURL=box.css.map */

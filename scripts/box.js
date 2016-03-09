@@ -21,6 +21,16 @@
         for (var j = 0; j < recipe.ingredients.length; j++) {
           newRecipe.children('ul').eq(0).append($('<li>' + recipe.ingredients[j] + '</li>'));
         }
+        newRecipe.click(function (e) {
+          var overlay = $('#overlay');
+          var hideOverlay = function () {
+            overlay.addClass('hidden');
+            this.removeEventListener('click', hideOverlay);
+          };
+          overlay.removeClass('hidden');
+          overlay.click(hideOverlay);
+          $('#recipe-overlay').html($(this).html());
+        })
         row.append(newRecipe);
         if (!((i + 1) % 3)) { // Start new row every 3 recipes
           recipeDiv.append(row);
