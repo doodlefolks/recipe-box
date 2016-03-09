@@ -65,6 +65,30 @@
         });
       });
     });
+    $('nav button').click(function (e) {
+      var mains = $('main');
+      var displayedMain = $('main:not(.hidden)');
+      var nextMain = $('#' + $(this).attr('name'));
+      $('nav button.button-primary').removeClass('button-primary');
+      $(this).addClass('button-primary');
+      if (parseInt(displayedMain.attr('value')) < parseInt(nextMain.attr('value'))) {
+        displayedMain.addClass('fadeOutLeft animated');
+        window.setTimeout(function () {
+          displayedMain.addClass('hidden');
+          displayedMain.removeClass('fadeOutLeft animated');
+          nextMain.removeClass('hidden');
+          nextMain.addClass('fadeInRight animated');
+        }, 500);
+      } else if (parseInt(displayedMain.attr('value')) > parseInt(nextMain.attr('value'))) {
+        displayedMain.addClass('fadeOutRight animated');
+        window.setTimeout(function () {
+          displayedMain.addClass('hidden');
+          displayedMain.removeClass('fadeOutRight animated');
+          nextMain.removeClass('hidden');
+          nextMain.addClass('fadeInLeft animated');
+        }, 500);
+      }
+    });
 
     populateRecipes(userRef);
   };

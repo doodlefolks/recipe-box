@@ -5,34 +5,42 @@
     <title>Recipe Box</title>
     <link rel="stylesheet" type="text/css" href="styles/Skeleton-2.0.4/css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="styles/Skeleton-2.0.4/css/skeleton.css" />
+    <link rel="stylesheet" type="text/css" href="styles/animate.css" />
     <link rel="stylesheet" type="text/css" href="styles/box.css" />
   </head>
   <body class="container">
     <nav class="row hidden">
-      <a href="#" class="four columns">Recipe Box</a>
-      <a href="#" class="four columns">Find New Recipes</a>
-      <a href="#" class="four columns">Pantry</a>
+      <button class="four columns button-primary" name="box">Recipe Box</button>
+      <button class="four columns" name="recipe-search">Find New Recipes</button>
+      <button class="four columns" name="pantry">Pantry</button>
     </nav>
     <form id="login">
       <label for="login-email">Email:</label>
-      <input class="u-full-width" type="email" name="login-email" id="login-email" />
+      <input class="u-full-width" type="email" id="login-email" />
       <label for="login-password">Password:</label>
-      <input class="u-full-width" type="password" name="login-password" id="login-password"/>
+      <input class="u-full-width" type="password" id="login-password"/>
       <input id="login-submit" type="submit" />
     </form>
-    <main id="box" class="hidden">
+    <main id="box" class="hidden" value="1">
       <div id="recipes"></div>
       <form class="hidden" id="recipe-form">
         <label for="recipe-name">Recipe Name</label>
-        <input class="twelve columns" name="recipe-name" id="recipe-name" type="text" required />
+        <input class="twelve columns" id="recipe-name" type="text" required />
         <label>Ingredients</label>
         <button id="add-ingredient">Add Ingredient</button>
         <div id="ingredient-list"></div>
         <label for="directions">Directions</label>
-        <textarea class="twelve columns" name="directions" id="directions" required></textarea>
+        <textarea class="twelve columns" id="directions" required></textarea>
         <input type="submit" id="recipe-submit" />
       </form>
       <button id="add-recipe">Add New Recipe</button>
+    </main>
+    <main id="recipe-search" class="hidden" value="2">
+      <form>
+        <label for="food2fork-query">Search For A Recipe:</label>
+        <input type="text" id="food2fork-query" />
+        <input type="submit" id="food2fork-submit" />
+      </form>
     </main>
     <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
