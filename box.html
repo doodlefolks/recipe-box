@@ -10,11 +10,10 @@
   </head>
   <body class="container">
     <div id="overlay" class="hidden">
-        <div id="recipe-overlay"></div>
+        <div id="recipe-overlay" class="hidden"></div>
     </div>
     <nav class="row hidden">
       <button class="four columns button-primary" name="box">Recipe Box</button>
-      <button class="four columns" name="recipe-search">Find New Recipes</button>
       <button class="four columns" name="pantry">Pantry</button>
     </nav>
     <form id="login">
@@ -23,6 +22,16 @@
       <label for="login-password">Password:</label>
       <input class="u-full-width" type="password" id="login-password"/>
       <input id="login-submit" type="submit" />
+      <button id="new-user">Sign Up</button>
+    </form>
+    <form class="hidden" id="new-user-form">
+      <label for="new-login-email">Email:</label>
+      <input class="u-full-width" type="email" id="new-login-email" />
+      <label for="new-login-password">Password:</label>
+      <input class="u-full-width" type="password" id="new-login-password"/>
+      <label for="new-login-password-confirm">Confirm Password:</label>
+      <input class="u-full-width" type="password" id="new-login-password-confirm"/>
+      <input id="new-login-submit" type="submit" />
     </form>
     <main id="box" class="hidden" value="1">
       <div id="recipes"></div>
@@ -38,12 +47,21 @@
       </form>
       <button id="add-recipe">Add New Recipe</button>
     </main>
-    <main id="recipe-search" class="hidden" value="2">
+    <!-- <main id="recipe-search" class="hidden" value="2">
       <form>
         <label for="food2fork-query">Search For A Recipe:</label>
         <input type="text" id="food2fork-query" />
         <input type="submit" id="food2fork-submit" />
       </form>
+    </main> -->
+    <main id="pantry" class="hidden" value="2">
+      <div id="pantry-items"></div>
+      <form class="hidden" id="pantry-form">
+        <label for="ingredient-name">Ingredient:</label>
+        <input type="text" id="ingredient-name" />
+        <input type="submit" id="ingredient-submit" />
+      </form>
+      <button id="add-pantry">Add New Ingredient</button>
     </main>
     <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
