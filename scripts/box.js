@@ -34,7 +34,7 @@
         for (var i = 0; i < recipeKeys.length; i++) {
           var recipe = recipes[recipeKeys[i]];
           var newRecipe = $('\
-            <div class="recipe-container four columns">\
+            <div class="recipe-container">\
                 <h5>' + recipe.name + '</h5>\
                 <h6>Ingredients</h6>\
                 <ul>\
@@ -42,10 +42,14 @@
                 <h6>Directions</h6>\
                 <p>' + recipe.directions + '</p>\
             </div>');
+          var recipeCard = $('\
+            <div class="recipe-card four columns">\
+              <h5>' + recipe.name + '</h5>\
+            </div>');
           for (var j = 0; j < recipe.ingredients.length; j++) {
             newRecipe.children('ul').eq(0).append($('<li>' + recipe.ingredients[j] + '</li>'));
           }
-          newRecipe.click(function (e) {
+          recipeCard.click(function (e) {
             var overlay = $('#overlay');
             var hideOverlay = function () {
               overlay.addClass('hidden');
@@ -54,10 +58,10 @@
             };
             overlay.removeClass('hidden');
             overlay.click(hideOverlay);
-            $('#recipe-overlay').html($(this).html());
+            $('#recipe-overlay').html(newRecipe.html());
             $('#recipe-overlay').removeClass('hidden');
           })
-          row.append(newRecipe);
+          row.append(recipeCard);
           if (!((i + 1) % 3)) { // Start new row every 3 recipes
             recipeDiv.append(row);
             row = $('<div class="row"></div>');
@@ -93,6 +97,9 @@
       var nextMain = $('#' + $(this).attr('name'));
       $('nav button.button-primary').removeClass('button-primary');
       $(this).addClass('button-primary');
+      if ($(this).attr('name') === 'pantry') {
+        populatePantry();
+      }
       if (parseInt(displayedMain.attr('value')) < parseInt(nextMain.attr('value'))) {
         displayedMain.addClass('fadeOutLeft animated');
         window.setTimeout(function () {
@@ -122,29 +129,36 @@
     });
     $('#recipe-submit').click(function (e) {
       e.preventDefault();
+      var name = $('#recipe-name').val();
+      var directions = $('#directions').val();
+      var ingredientNodes = $('input[name="ingredient"]');
+      var ingredients = {};
+      for (var i = 0; i < ingredientNodes.length; i++) {
+        ingredients[i] = ingredientNodes[i].value;
+      }
       userRef.once('value', function(data) {
         var userData = data.val();
-        var name = $('#recipe-name').val();
-        var directions = $('#directions').val();
-        var ingredientNodes = $('input[name="ingredient"]');
-        var ingredients = {};
-        for (var i = 0; i < ingredientNodes.length; i++) {
-          ingredients[i] = ingredientNodes[i].value;
-        }
         userRef.update({ recipeCount: userData.recipeCount + 1 });
         userRef.child('recipes').push({
           name: name,
           ingredients: ingredients,
           directions: directions
         });
+        populateRecipes();
       });
+      document.getElementById('recipe-form').reset();
+      $('#recipe-form').addClass('hidden');
+      $('#recipe-form input[name="ingredient"]').remove();
     });
     $('#add-pantry').click(function (e) {
       $('#pantry-form').removeClass('hidden');
     });
     $('#ingredient-submit').click(function (e) {
       e.preventDefault();
-      userRef.child('pantry').push('test');
+      var ingredientName = $('#ingredient-name').val();
+      userRef.child('pantry').push(ingredientName);
+      document.getElementById('pantry-form').reset();
+      $('#pantry-form').addClass('hidden');
       populatePantry();
     });
   };
