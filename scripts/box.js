@@ -233,7 +233,16 @@
       if (!error) {
         userAuthorized(authData);
       } else {
-        console.log(error);
+        switch (error.code) {
+          case 'INVALID_EMAIL':
+            alert('Your email is invalid');
+            break;
+          case 'INVALID_PASSWORD':
+            alert('Your password is wrong');
+            break;
+          default:
+            alert('There was an error with code ' + error.code);
+        }
       }
     }, {
       remember: "sessionOnly"
