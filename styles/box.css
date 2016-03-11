@@ -37,6 +37,7 @@ h6 {
   margin: 50px 10%;
   padding: 30px;
   overflow: scroll;
-  border-radius: 10px; }
+  border-radius: 10px;
+  max-height: 75%; }
 
 /*# sourceMappingURL=box.css.map */

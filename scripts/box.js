@@ -66,6 +66,7 @@
       var row = $('<div class="row"></div>');
       for (var i = 0; i < recipeKeys.length; i++) {
         var recipe = recipes[recipeKeys[i]];
+        var directions = recipe.directions.replace('\\n', '<br>');
         var newRecipe = $('\
           <div class="recipe-container">\
               <h5>' + recipe.name + '</h5>\
@@ -73,7 +74,7 @@
               <ul>\
               </ul>\
               <h6>Directions</h6>\
-              <p>' + recipe.directions + '</p>\
+              <p>' + directions + '</p>\
           </div>');
         var recipeCard = $('\
           <div class="recipe-card four columns">\
@@ -191,6 +192,7 @@
       e.preventDefault();
       var name = $('#recipe-name').val();
       var directions = $('#directions').val();
+      directions = directions.replace(/\r\n|\r|\n/g, '<br />');
       var ingredientQtyNodes = $('input[name="qty"]');
       var ingredientNameNodes = $('input[name="ingredient"]');
       var ingredients = {};
