@@ -53,6 +53,11 @@
       });
     });
   };
+  var getRecipesAndPopulate = function () {
+    userRef.child('recipes').once('value', function (data) {
+      populateRecipes(data.val(), '#recipes');
+    });
+  };
   var populateRecipes = function (recipes, appendToDiv) {
     if (recipes) {
       var recipeKeys = Object.keys(recipes);
@@ -77,7 +82,7 @@
         for (var j = 0; j < recipe.ingredients.length; j++) {
           newRecipe.children('ul').eq(0).append($('<li>' + recipe.ingredients[j] + '</li>'));
         }
-        (function (newRecipeHtml) {
+        (function (newRecipeHtml, i) {
           recipeCard.click(function (e) {
             var overlay = $('#overlay');
             var hideOverlay = function () {
@@ -88,9 +93,16 @@
             overlay.removeClass('hidden');
             overlay.click(hideOverlay);
             $('#recipe-overlay').html(newRecipeHtml);
+            var deleteButton = $('<button>Delete Recipe</button>');
+            deleteButton.click(function (e) {
+              userRef.child('recipes/' + recipeKeys[i]).remove(function () {
+                getRecipesAndPopulate();
+              });
+            });
+            $('#recipe-overlay').append(deleteButton);
             $('#recipe-overlay').removeClass('hidden');
           });
-        })(newRecipe.html());
+        })(newRecipe.html(), i);
         row.append(recipeCard);
         if (!((i + 1) % 3)) { // Start new row every 3 recipes
           recipeDiv.append(row);
@@ -112,8 +124,16 @@
         for (var i = 0; i < pantryItemKeys.length; i++) {
           var newItem = $('\
             <div class="row">\
-              <p>' + pantryItems[pantryItemKeys[i]] + '</p>\
+              <span>' + pantryItems[pantryItemKeys[i]] + '</span>\
+              <button>Delete</button>\
             </div>');
+          (function (i) {
+            newItem.find('button').click(function (e) {
+              userRef.child('pantry/' + pantryItemKeys[i]).remove(function () {
+                populatePantry();
+              });
+            });
+          })(i);
           pantryDiv.append(newItem);
         }
       }
@@ -176,9 +196,7 @@
           ingredients: ingredients,
           directions: directions
         }, function () {
-          userRef.child('recipes').once('value', function (data) {
-            populateRecipes(data.val(), '#recipes');
-          });
+          getRecipesAndPopulate();
         });
       });
       document.getElementById('recipe-form').reset();
@@ -204,9 +222,7 @@
     $('#login').addClass('hidden');
     $('#new-user-form').addClass('hidden');
     addEvents();
-    userRef.child('recipes').once('value', function (data) {
-      populateRecipes(data.val(), '#recipes');
-    });
+    getRecipesAndPopulate();
   };
 
   $(document).ready(function () {
