@@ -18,6 +18,7 @@ h6 {
   padding: 10px;
   margin-bottom: 20px;
   overflow: scroll;
+  background-color: white;
   &:hover {
     cursor: pointer;
   }
@@ -41,4 +42,15 @@ h6 {
   overflow: scroll;
   border-radius: 10px;
   max-height: 75%;
+}
+body {
+  background-image: url('../images/bg-image.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+button, input {
+  background-color: white;
+}
+label, #pantry span {
+  color: white;
 }

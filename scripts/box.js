@@ -195,6 +195,7 @@
       document.getElementById('recipe-form').reset();
       $('#recipe-form').addClass('hidden');
       $('#recipe-form input[name="ingredient"]').remove();
+      $('#recipe-form span').remove();
       $('#recipe-form input[name="qty"]').remove();
     });
     $('#add-pantry').click(function (e) {
