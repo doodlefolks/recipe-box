@@ -296,5 +296,24 @@
         }
       });
     });
+    $('#forgot-password').click(function (e) {
+      e.preventDefault();
+      var email = $('#login-email').val();
+      db.resetPassword({
+        email: email
+      }, function (error) {
+        if (error) {
+          switch (error.code) {
+            case "INVALID_USER":
+              alert("The specified user account does not exist.");
+              break;
+            default:
+              alert("Error resetting password:", error);
+          }
+        } else {
+          alert("Password reset email sent successfully!");
+        }
+      });
+    });
   });
 })();
