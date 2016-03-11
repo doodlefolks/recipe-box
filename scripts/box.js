@@ -2,27 +2,6 @@
   var db = new Firebase(config.FIREBASE_API);
   var userRef;
 
-  var createNewUser = function (userData) {
-    var newUser = {};
-    newUser[userData.uid] = {
-      recipeCount: 0
-    };
-    db.child('users').update(newUser);
-  };
-  var loginUser = function (email, password) {
-    db.authWithPassword({
-        email: email,
-        password: password
-      }, function(error, authData) {
-        if (!error) {
-          userAuthorized(authData);
-        } else {
-          console.log(error);
-        }
-      }, {
-        remember: "sessionOnly"
-    });
-  };
   var getRecipesMatchingPantry = function () {
     userRef.child('recipes').once('value', function (recipeData) {
       userRef.child('pantry').once('value', function (pantryData) {
@@ -31,11 +10,11 @@
         var pantryKeys = Object.keys(pantry);
         var recipeKeys = Object.keys(recipes);
         var pantryItems = [];
+        var matchingRecipes = {};
+        var matches;
         for (var i = 0; i < pantryKeys.length; i++) {
           pantryItems.push(pantry[pantryKeys[i]]);
         }
-        var matchingRecipes = {};
-        var matches;
         for (var i = 0; i < recipeKeys.length; i++) {
           matches = true;
           var ingredients = recipes[recipeKeys[i]].ingredients;
@@ -238,6 +217,27 @@
     $('#new-user-form').addClass('hidden');
     addEvents();
     getRecipesAndPopulate();
+  };
+  var createNewUser = function (userData) {
+    var newUser = {};
+    newUser[userData.uid] = {
+      recipeCount: 0
+    };
+    db.child('users').update(newUser);
+  };
+  var loginUser = function (email, password) {
+    db.authWithPassword({
+      email: email,
+      password: password
+    }, function(error, authData) {
+      if (!error) {
+        userAuthorized(authData);
+      } else {
+        console.log(error);
+      }
+    }, {
+      remember: "sessionOnly"
+    });
   };
 
   $(document).ready(function () {
