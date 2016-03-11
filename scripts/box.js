@@ -23,32 +23,61 @@
         remember: "sessionOnly"
     });
   };
-  var populateRecipes = function () {
-    userRef.child('recipes').once('value', function(data) {
-      var recipes = data.val();
-      if (recipes) {
+  var getRecipesMatchingPantry = function () {
+    userRef.child('recipes').once('value', function (recipeData) {
+      userRef.child('pantry').once('value', function (pantryData) {
+        var pantry = pantryData.val();
+        var recipes = recipeData.val();
+        var pantryKeys = Object.keys(pantry);
         var recipeKeys = Object.keys(recipes);
-        var recipeDiv = $('#recipes');
-        recipeDiv.html('');
-        var row = $('<div class="row"></div>');
+        var pantryItems = [];
+        for (var i = 0; i < pantryKeys.length; i++) {
+          pantryItems.push(pantry[pantryKeys[i]]);
+        }
+        var matchingRecipes = {};
+        var matches;
         for (var i = 0; i < recipeKeys.length; i++) {
-          var recipe = recipes[recipeKeys[i]];
-          var newRecipe = $('\
-            <div class="recipe-container">\
-                <h5>' + recipe.name + '</h5>\
-                <h6>Ingredients</h6>\
-                <ul>\
-                </ul>\
-                <h6>Directions</h6>\
-                <p>' + recipe.directions + '</p>\
-            </div>');
-          var recipeCard = $('\
-            <div class="recipe-card four columns">\
-              <h5>' + recipe.name + '</h5>\
-            </div>');
-          for (var j = 0; j < recipe.ingredients.length; j++) {
-            newRecipe.children('ul').eq(0).append($('<li>' + recipe.ingredients[j] + '</li>'));
+          matches = true;
+          var ingredients = recipes[recipeKeys[i]].ingredients;
+          var ingredientKeys = Object.keys(ingredients);
+          for (var j = 0; j < ingredientKeys.length; j++) {
+            if (pantryItems.indexOf(ingredients[ingredientKeys[j]]) === -1) {
+              matches = false;
+            }
           }
+          if (matches) {
+            matchingRecipes[recipeKeys[i]] = recipes[recipeKeys[i]];
+          }
+        }
+        populateRecipes(matchingRecipes, '#recipes2');
+      });
+    });
+  };
+  var populateRecipes = function (recipes, appendToDiv) {
+    if (recipes) {
+      var recipeKeys = Object.keys(recipes);
+      var recipeDiv = $(appendToDiv);
+      recipeDiv.html('');
+      var row = $('<div class="row"></div>');
+      for (var i = 0; i < recipeKeys.length; i++) {
+        var recipe = recipes[recipeKeys[i]];
+        var newRecipe = $('\
+          <div class="recipe-container">\
+              <h5>' + recipe.name + '</h5>\
+              <h6>Ingredients</h6>\
+              <ul>\
+              </ul>\
+              <h6>Directions</h6>\
+              <p>' + recipe.directions + '</p>\
+          </div>');
+        var recipeCard = $('\
+          <div class="recipe-card four columns">\
+            <h5>' + recipe.name + '</h5>\
+          </div>');
+        for (var j = 0; j < recipe.ingredients.length; j++) {
+          newRecipe.children('ul').eq(0).append($('<li>' + recipe.ingredients[j] + '</li>'));
+        }
+        (function (newRecipeHtml) {
           recipeCard.click(function (e) {
             var overlay = $('#overlay');
             var hideOverlay = function () {
@@ -58,20 +87,20 @@
             };
             overlay.removeClass('hidden');
             overlay.click(hideOverlay);
-            $('#recipe-overlay').html(newRecipe.html());
+            $('#recipe-overlay').html(newRecipeHtml);
             $('#recipe-overlay').removeClass('hidden');
-          })
-          row.append(recipeCard);
-          if (!((i + 1) % 3)) { // Start new row every 3 recipes
-            recipeDiv.append(row);
-            row = $('<div class="row"></div>');
-          }
-        }
-        if (recipeKeys.length % 3) {
+          });
+        })(newRecipe.html());
+        row.append(recipeCard);
+        if (!((i + 1) % 3)) { // Start new row every 3 recipes
           recipeDiv.append(row);
+          row = $('<div class="row"></div>');
         }
       }
-    });
+      if (recipeKeys.length % 3) {
+        recipeDiv.append(row);
+      }
+    }
   };
   var populatePantry = function () {
     userRef.child('pantry').once('value', function (data) {
@@ -92,13 +121,16 @@
   };
   var addEvents = function () {
     $('nav button').click(function (e) {
+      var $this = $(this);
       var mains = $('main');
       var displayedMain = $('main:not(.hidden)');
-      var nextMain = $('#' + $(this).attr('name'));
+      var nextMain = $('#' + $this.attr('name'));
       $('nav button.button-primary').removeClass('button-primary');
-      $(this).addClass('button-primary');
-      if ($(this).attr('name') === 'pantry') {
+      $this.addClass('button-primary');
+      if ($this.attr('name') === 'pantry') {
         populatePantry();
+      } else if ($this.attr('name') === 'recipe-match') {
+        getRecipesMatchingPantry();
       }
       if (parseInt(displayedMain.attr('value')) < parseInt(nextMain.attr('value'))) {
         displayedMain.addClass('fadeOutLeft animated');
@@ -143,8 +175,11 @@
           name: name,
           ingredients: ingredients,
           directions: directions
+        }, function () {
+          userRef.child('recipes').once('value', function (data) {
+            populateRecipes(data.val(), '#recipes');
+          });
         });
-        populateRecipes();
       });
       document.getElementById('recipe-form').reset();
       $('#recipe-form').addClass('hidden');
@@ -169,7 +204,9 @@
     $('#login').addClass('hidden');
     $('#new-user-form').addClass('hidden');
     addEvents();
-    populateRecipes();
+    userRef.child('recipes').once('value', function (data) {
+      populateRecipes(data.val(), '#recipes');
+    });
   };
 
   $(document).ready(function () {

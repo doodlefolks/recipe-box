@@ -15,6 +15,7 @@
     <nav class="row hidden">
       <button class="four columns button-primary" name="box">Recipe Box</button>
       <button class="four columns" name="pantry">Pantry</button>
+      <button class="four columns" name="recipe-match">Recipes I Can Make</button>
     </nav>
     <form id="login">
       <label for="login-email">Email:</label>
@@ -62,6 +63,9 @@
         <input type="submit" id="ingredient-submit" />
       </form>
       <button id="add-pantry">Add New Ingredient</button>
+    </main>
+    <main id="recipe-match" class="hidden" value="3">
+      <div id='recipes2'></div>
     </main>
     <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
