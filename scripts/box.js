@@ -145,6 +145,8 @@
       var mains = $('main');
       var displayedMain = $('main:not(.hidden)');
       var nextMain = $('#' + $this.attr('name'));
+      displayedMain.removeClass('fadeInRight fadeIntLeft fadeOutRight fadeOutLeft animated');
+      nextMain.removeClass('fadeInRight fadeIntLeft fadeOutRight fadeOutLeft animated');
       $('nav button.button-primary').removeClass('button-primary');
       $this.addClass('button-primary');
       if ($this.attr('name') === 'pantry') {
