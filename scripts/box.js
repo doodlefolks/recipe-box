@@ -41,7 +41,7 @@
           var ingredients = recipes[recipeKeys[i]].ingredients;
           var ingredientKeys = Object.keys(ingredients);
           for (var j = 0; j < ingredientKeys.length; j++) {
-            if (pantryItems.indexOf(ingredients[ingredientKeys[j]]) === -1) {
+            if (pantryItems.indexOf(ingredients[ingredientKeys[j]].name) === -1) {
               matches = false;
             }
           }
@@ -59,10 +59,10 @@
     });
   };
   var populateRecipes = function (recipes, appendToDiv) {
+    var recipeDiv = $(appendToDiv);
+    recipeDiv.html('');
     if (recipes) {
       var recipeKeys = Object.keys(recipes);
-      var recipeDiv = $(appendToDiv);
-      recipeDiv.html('');
       var row = $('<div class="row"></div>');
       for (var i = 0; i < recipeKeys.length; i++) {
         var recipe = recipes[recipeKeys[i]];
@@ -80,7 +80,7 @@
             <h5>' + recipe.name + '</h5>\
           </div>');
         for (var j = 0; j < recipe.ingredients.length; j++) {
-          newRecipe.children('ul').eq(0).append($('<li>' + recipe.ingredients[j] + '</li>'));
+          newRecipe.children('ul').eq(0).append($('<li>' + recipe.ingredients[j].qty + ' ' + recipe.ingredients[j].name + '</li>'));
         }
         (function (newRecipeHtml, i) {
           recipeCard.click(function (e) {
@@ -116,11 +116,11 @@
   };
   var populatePantry = function () {
     userRef.child('pantry').once('value', function (data) {
+      var pantryDiv = $('#pantry-items');
+      pantryDiv.html('');
       if (data.val()) {
         var pantryItems = data.val();
         var pantryItemKeys = Object.keys(pantryItems);
-        var pantryDiv = $('#pantry-items');
-        pantryDiv.html('');
         for (var i = 0; i < pantryItemKeys.length; i++) {
           var newItem = $('\
             <div class="row">\
@@ -178,17 +178,27 @@
     $('#add-ingredient').click(function (e) {
       e.preventDefault();
       var row = $('<div class="row"></div>')
-      row.append($('<input class="row" type="text" name="ingredient">'));
+      row.append($('\
+        <div class="row">\
+          <span>Amount:</span>\
+          <input class="row" type="text" name="qty">\
+          <span>Ingredient:</span>\
+          <input type="text" name="ingredient">\
+        </div>'));
       $('#ingredient-list').append(row);
     });
     $('#recipe-submit').click(function (e) {
       e.preventDefault();
       var name = $('#recipe-name').val();
       var directions = $('#directions').val();
-      var ingredientNodes = $('input[name="ingredient"]');
+      var ingredientQtyNodes = $('input[name="qty"]');
+      var ingredientNameNodes = $('input[name="ingredient"]');
       var ingredients = {};
-      for (var i = 0; i < ingredientNodes.length; i++) {
-        ingredients[i] = ingredientNodes[i].value;
+      for (var i = 0; i < ingredientNameNodes.length; i++) {
+        ingredients[i] = {
+          qty: ingredientQtyNodes[i].value,
+          name: ingredientNameNodes[i].value
+        };
       }
       userRef.once('value', function(data) {
         var userData = data.val();
@@ -204,6 +214,7 @@
       document.getElementById('recipe-form').reset();
       $('#recipe-form').addClass('hidden');
       $('#recipe-form input[name="ingredient"]').remove();
+      $('#recipe-form input[name="qty"]').remove();
     });
     $('#add-pantry').click(function (e) {
       $('#pantry-form').removeClass('hidden');
