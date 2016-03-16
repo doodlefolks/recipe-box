@@ -12,9 +12,7 @@ h6 {
   overflow: scroll;
 }
 .recipe-card {
-  border: 1px solid black;
   border-radius: 4px;
-  box-shadow: 3px 3px 5px black;
   padding: 10px;
   margin-bottom: 20px;
   overflow: scroll;
@@ -51,6 +49,6 @@ body {
 button, input {
   background-color: white;
 }
-label, #pantry span {
+label, #pantry span, #ingredient-list span {
   color: white;
 }
