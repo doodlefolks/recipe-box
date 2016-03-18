@@ -1,0 +1,3 @@
+Recipe Box is a web application that stores user recipes, pantry items, and shows what recipes can be made with ingredients on hand. It is built with Skeleton css framework, Sass, jQuery, and Firebase API. I designed the app to be a single page that is manipulated with jQuery for a clean and responsive user experience.
+
+The app is separated into three pages. The first displays the user's recipes and provides functions to add and delete recipes. The second lists pantry items which can also be added and deleted. The last page filters recipes and shows only what can be made. All of the database work happens asynchronously and pages are not populated until the user navigates to them. This keeps the app snappy and intuitive.
